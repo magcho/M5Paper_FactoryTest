@@ -14,7 +14,7 @@ void frame_factorytest_exit_cb(epdgui_args_vector_t &args)
 
 Frame_FactoryTest::Frame_FactoryTest(void)
 {
-    //TODO: Voltage WiFi Psram touch pos
+    // TODO: Voltage WiFi Psram touch pos
     _frame_name = "Frame_FactoryTest";
 
     _canvas_base = new M5EPD_Canvas(&M5.EPD);
@@ -106,11 +106,11 @@ Frame_FactoryTest::~Frame_FactoryTest(void)
     delete _canvas_pass;
 }
 
-void Frame_FactoryTest::drawItem(uint16_t flag, const char* str, int y)
+void Frame_FactoryTest::drawItem(uint16_t flag, const char *str, int y)
 {
     String prefix_pass("[PASS] ");
     String prefix_none("");
-    if(_pass_flag & flag)
+    if (_pass_flag & flag)
     {
         _canvas_base->drawString(prefix_pass + str, POS_LX, y);
     }
@@ -123,7 +123,7 @@ void Frame_FactoryTest::drawItem(uint16_t flag, const char* str, int y)
 
 void Frame_FactoryTest::drawItem(m5epd_update_mode_t mode)
 {
-    
+
     _canvas_base->fillCanvas(0);
     if (_language == LANGUAGE_JA)
     {
@@ -177,7 +177,7 @@ void Frame_FactoryTest::drawGrove(m5epd_update_mode_t mode)
 
 bool Frame_FactoryTest::checkGrove(int sda, int scl)
 {
-    Wire1.begin(sda, scl, 10000);
+    Wire1.begin(sda, scl, (uint32_t)10000);
     bool groveCheck = true;
 
     Wire1.beginTransmission(0x76);
@@ -277,7 +277,7 @@ int Frame_FactoryTest::run()
         ispressed = true;
     }
     buf[ptr] = '\0';
-    if(ptr == 0)
+    if (ptr == 0)
     {
         strcpy(buf, "Waiting...");
     }
@@ -320,7 +320,7 @@ int Frame_FactoryTest::run()
 
         // SHT30
         M5.SHT30.UpdateData();
-        if(M5.SHT30.GetError() == 0)
+        if (M5.SHT30.GetError() == 0)
         {
             float ctemp = M5.SHT30.GetTemperature();
             float chumi = M5.SHT30.GetRelHumidity();
@@ -435,7 +435,6 @@ int Frame_FactoryTest::run()
         _canvas_data->pushCanvas(300, 100, UPDATE_MODE_A2);
     }
 
-
     //  grove
     uint16_t temp = pass_flag;
     if (!(pass_flag & 0x0400))
@@ -450,11 +449,11 @@ int Frame_FactoryTest::run()
     {
         pass_flag |= checkGrove(M5EPD_PORTC_Y_PIN, M5EPD_PORTC_W_PIN) ? 0x1000 : 0x0000;
     }
-    
+
     bool update_flag = false;
-    if(temp != pass_flag)
+    if (temp != pass_flag)
     {
-        if(pass_flag != _pass_flag)
+        if (pass_flag != _pass_flag)
         {
             update_flag = true;
         }
@@ -468,7 +467,7 @@ int Frame_FactoryTest::run()
         drawItem(UPDATE_MODE_GL16);
         update_flag = true;
     }
-    if(update_flag)
+    if (update_flag)
     {
         drawPassCount(UPDATE_MODE_GL16);
     }
